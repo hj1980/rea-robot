@@ -25,7 +25,17 @@ class RobotSimulator {
   /** Return current state. */
   getCurrentState() {
     return new Promise((resolve, reject) => {
-      resolve(this.state);
+      return resolve(this.state);
+    });
+  }
+
+
+  /** Process command. */
+  processCommand(command) {
+    return new Promise((resolve, reject) => {
+      var result = /^(PLACE ([0-9]+) ([0-9]+) (NORTH|SOUTH|EAST|WEST)|MOVE ([0-9]+)|LEFT|RIGHT|REPORT)$/.exec(command);
+      if (result) return resolve(result);
+      return reject(new Error('Invalid command syntax'));
     });
   }
 
