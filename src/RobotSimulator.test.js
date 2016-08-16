@@ -113,17 +113,33 @@ describe("RobotSimulator", function () {
     });
 
 
+
   });
 
   describe("Verify state generation:", function () {
 
 
 
-    it("should correctly reflect state after PLACE command.", function () {
+    it("should correctly reflect state after PLACEment off the table.", function () {
 
       // Process the command with a new instance of RobotSimulator.
       const robotSimulator = new RobotSimulator(tableWidth, tableHeight);
 
+      robotSimulator.processCommand('PLACE ' + tableWidth + ',' + tableHeight + ',NORTH');
+
+      // Check to see that the state is generated correctly.
+      const state = robotSimulator.getCurrentState();
+      assert.deepEqual(state.robot, undefined);
+
+    });
+
+
+
+    it("should correctly reflect state after PLACEment on the table.", function () {
+
+      const robotSimulator = new RobotSimulator(tableWidth, tableHeight);
+
+      robotSimulator.processCommand('PLACE ' + tableWidth + ',' + tableHeight + ',NORTH');
       robotSimulator.processCommand('PLACE 0,0,NORTH');
 
       // Check to see that the state is generated correctly.
@@ -140,7 +156,6 @@ describe("RobotSimulator", function () {
 
     it("should correctly reflect state after MOVE command.", function () {
 
-      // Process the command with a new instance of RobotSimulator.
       const robotSimulator = new RobotSimulator(tableWidth, tableHeight);
 
       robotSimulator.processCommand('PLACE 0,0,NORTH');
@@ -158,56 +173,217 @@ describe("RobotSimulator", function () {
 
 
 
+    it("should correctly reflect state after rePLACEment on the table.", function () {
+
+      const robotSimulator = new RobotSimulator(tableWidth, tableHeight);
+
+      robotSimulator.processCommand('PLACE 0,0,NORTH');
+      robotSimulator.processCommand('MOVE');
+      robotSimulator.processCommand('PLACE 0,0,NORTH');
+
+      // Check to see that the state is generated correctly.
+      const state = robotSimulator.getCurrentState();
+      assert.deepEqual(state.robot, {
+        x: 0,
+        y: 0,
+        f: 'NORTH'
+      });
+
+    });
+
+
+
+    it("should correctly reflect state after LEFT command.", function () {
+
+      const robotSimulator = new RobotSimulator(tableWidth, tableHeight);
+
+      robotSimulator.processCommand('PLACE 0,0,NORTH');
+
+      // Counter-clockwise starting at NORTH (ie. Turning Left).
+      const directions = ['NORTH', 'WEST', 'SOUTH', 'EAST'];
+
+      // Do a left-wheelie...
+      directions.forEach((f, idx) => {
+        robotSimulator.processCommand('LEFT');
+        assert.deepEqual(robotSimulator.getCurrentState().robot, {
+          x: 0,
+          y: 0,
+          f: directions[(idx + 1) % directions.length]
+        });
+      })
+
+    });
+
+
+
+    it("should correctly reflect state after RIGHT command.", function () {
+
+      const robotSimulator = new RobotSimulator(tableWidth, tableHeight);
+
+      robotSimulator.processCommand('PLACE 0,0,NORTH');
+
+      // Clockwise starting at NORTH (ie. Turning Right).
+      const directions = ['NORTH', 'EAST', 'SOUTH', 'WEST'];
+
+      // Do a right-wheelie...
+      directions.forEach((f, idx) => {
+        robotSimulator.processCommand('RIGHT');
+        assert.deepEqual(robotSimulator.getCurrentState().robot, {
+          x: 0,
+          y: 0,
+          f: directions[(idx + 1) % directions.length]
+        });
+      })
+
+    });
+
+
+
+    it("should ignore everything until PLACEd on the table.", function () {
+
+      const robotSimulator = new RobotSimulator(tableWidth, tableHeight);
+
+      robotSimulator.processCommand('MOVE');
+      robotSimulator.processCommand('LEFT');
+      robotSimulator.processCommand('RIGHT');
+      robotSimulator.processCommand('REPORT');
+      robotSimulator.processCommand('PLACE ' + tableWidth + ',' + tableHeight + ',NORTH');
+
+      // Check to see that the state is generated correctly.
+      const state = robotSimulator.getCurrentState();
+      assert.deepEqual(state.robot, undefined);
+
+    });
+
+
+
+    it("should not fall to it's death.", function () {
+
+      const robotSimulator = new RobotSimulator(tableWidth, tableHeight);
+
+      robotSimulator.processCommand('PLACE 0,0,NORTH');
+
+      for (let x = 0; x < tableWidth * 2; x++) {
+        robotSimulator.processCommand('MOVE');
+      }
+
+      robotSimulator.processCommand('RIGHT');
+
+      for (let y = 0; y < tableHeight * 2; y++) {
+        robotSimulator.processCommand('MOVE');
+      }
+
+      // Check to see that the state is generated correctly.
+      const state = robotSimulator.getCurrentState();
+      assert.deepEqual(state.robot, {
+        x: 4,
+        y: 4,
+        f: 'EAST'
+      });
+
+    });
+
+
+
+    it("should REPORT it's ok.", function () {
+
+      const robotSimulator = new RobotSimulator(tableWidth, tableHeight);
+
+      robotSimulator.processCommand('PLACE 0,0,NORTH');
+
+      assert.deepEqual(robotSimulator.processCommand('REPORT'), '0,0,NORTH');
+
+    });
+
+
+
   });
 
-  describe("Verify command semantics and logic:", function () {
+  describe("Go on an adventure:", function () {
 
 
 
-    it("should allow placement of Robot on the table.", function () {
-      throw new Error("not implemented yet");
+    it("One small step.", function () {
+
+      const robotSimulator = new RobotSimulator(tableWidth, tableHeight);
+
+      robotSimulator.processCommand('PLACE 0,0,NORTH');
+      robotSimulator.processCommand('MOVE');
+
+      assert.deepEqual(robotSimulator.processCommand('REPORT'), '0,1,NORTH');
+
     });
 
 
 
-    it("should allow subsequent placement of Robot on the table.", function () {
-      throw new Error("not implemented yet");
+    it("Over to the left.", function () {
+
+      const robotSimulator = new RobotSimulator(tableWidth, tableHeight);
+
+      robotSimulator.processCommand('PLACE 0,0,NORTH');
+      robotSimulator.processCommand('LEFT');
+
+      assert.deepEqual(robotSimulator.processCommand('REPORT'), '0,0,WEST');
+
     });
 
 
 
-    it("should ignore placement of Robot off the table.", function () {
-      throw new Error("not implemented yet");
+    it("Across the hall.", function () {
+
+      const robotSimulator = new RobotSimulator(tableWidth, tableHeight);
+
+      robotSimulator.processCommand('PLACE 1,2,EAST');
+      robotSimulator.processCommand('MOVE');
+      robotSimulator.processCommand('MOVE');
+      robotSimulator.processCommand('LEFT');
+      robotSimulator.processCommand('MOVE');
+
+      assert.deepEqual(robotSimulator.processCommand('REPORT'), '3,3,NORTH');
+
     });
 
 
 
-    it("should ignore all commands until a valid PLACE command.", function () {
-      throw new Error("not implemented yet");
-    });
+    it("Down the street.", function () {
+
+      const robotSimulator = new RobotSimulator(tableWidth, tableHeight);
+
+      robotSimulator.processCommand('PLACE 3,1,WEST');
+      robotSimulator.processCommand('MOVE');
+      robotSimulator.processCommand('MOVE');
+      robotSimulator.processCommand('LEFT');
+      robotSimulator.processCommand('MOVE');
+      robotSimulator.processCommand('MOVE');
+      robotSimulator.processCommand('MOVE');
+      robotSimulator.processCommand('MOVE');
+      robotSimulator.processCommand('LEFT');
+      robotSimulator.processCommand('MOVE');
+      robotSimulator.processCommand('MOVE');
+      robotSimulator.processCommand('MOVE');
+      robotSimulator.processCommand('MOVE');
+      robotSimulator.processCommand('RIGHT');
+      robotSimulator.processCommand('RIGHT');
+      robotSimulator.processCommand('RIGHT');
+      robotSimulator.processCommand('LEFT');
+      robotSimulator.processCommand('RIGHT');
+      robotSimulator.processCommand('MOVE');
+      robotSimulator.processCommand('MOVE');
+
+      assert.deepEqual(robotSimulator.processCommand('REPORT'), '4,2,NORTH');
 
 
+      // subsequent PLACE
+      robotSimulator.processCommand('PLACE 4,4,EAST');
+      robotSimulator.processCommand('MOVE');
+      robotSimulator.processCommand('MOVE');
+      robotSimulator.processCommand('LEFT');
+      robotSimulator.processCommand('LEFT');
+      robotSimulator.processCommand('LEFT');
+      robotSimulator.processCommand('MOVE');
+      robotSimulator.processCommand('RIGHT');
 
-    it("should accept a valid MOVE command.", function () {
-      throw new Error("not implemented yet");
-    });
-
-
-
-    it("should not change state for an invalid MOVE command.", function () {
-      throw new Error("not implemented yet");
-    });
-
-
-
-    it("should accept a valid command after an invalid MOVE command.", function () {
-      throw new Error("not implemented yet");
-    });
-
-
-
-    it("should silently ignore invalid commands.", function () {
-      throw new Error("not implemented yet");
+      assert.deepEqual(robotSimulator.processCommand('REPORT'), '4,3,WEST');
     });
 
 
