@@ -41,28 +41,28 @@ describe("RobotSimulator", function () {
 
     it("should reject a bogus command.", function () {
       return new Promise((resolve, reject) => {
-        new RobotSimulator(tableWidth, tableHeight).processCommand('BOGUS').then(reject).catch(resolve);
+        new RobotSimulator(tableWidth, tableHeight).parseCommand('BOGUS').then(reject).catch(resolve);
       });
     });
 
     it("should accept a syntactically correct PLACE command.", function () {
-      return new RobotSimulator(tableWidth, tableHeight).processCommand('PLACE 0 0 NORTH');
+      return new RobotSimulator(tableWidth, tableHeight).parseCommand('PLACE 0 0 NORTH');
     });
 
     it("should accept a syntactically correct MOVE command.", function () {
-      return new RobotSimulator(tableWidth, tableHeight).processCommand('MOVE 1');
+      return new RobotSimulator(tableWidth, tableHeight).parseCommand('MOVE 1');
     });
 
     it("should accept a syntactically correct RIGHT command.", function () {
-      return new RobotSimulator(tableWidth, tableHeight).processCommand('LEFT');
+      return new RobotSimulator(tableWidth, tableHeight).parseCommand('LEFT');
     });
 
     it("should accept a syntactically correct LEFT command.", function () {
-      return new RobotSimulator(tableWidth, tableHeight).processCommand('RIGHT');
+      return new RobotSimulator(tableWidth, tableHeight).parseCommand('RIGHT');
     });
 
     it("should accept a syntactically correct REPORT command.", function () {
-      return new RobotSimulator(tableWidth, tableHeight).processCommand('REPORT');
+      return new RobotSimulator(tableWidth, tableHeight).parseCommand('REPORT');
     });
 
   });

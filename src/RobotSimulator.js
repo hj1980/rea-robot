@@ -30,8 +30,11 @@ class RobotSimulator {
   }
 
 
-  /** Process command. */
-  processCommand(command) {
+  /**
+   * Parse a command.
+   * @param {string} command - The command to parse.
+   */
+  parseCommand(command) {
     return new Promise((resolve, reject) => {
       var result = /^(PLACE ([0-9]+) ([0-9]+) (NORTH|SOUTH|EAST|WEST)|MOVE ([0-9]+)|LEFT|RIGHT|REPORT)$/.exec(command);
       if (result) return resolve(result);
