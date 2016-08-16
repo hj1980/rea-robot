@@ -4,8 +4,12 @@
   "description": "REA Toy Robot Simulator",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "./node_modules/.bin/mocha src/"
   },
   "author": "Heath Jones <hj1980@gmail.com>",
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+    "jsdoc": "^3.4.0",
+    "mocha": "^3.0.2"
+  }
 }
