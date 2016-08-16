@@ -11,7 +11,7 @@ class RobotSimulator {
     if (!width || typeof (width) !== 'number' || width < 1) throw new Error('Invalid width argument. Must be > 0.');
     if (!height || typeof (height) !== 'number' || height < 1) throw new Error('Invalid height argument. Must be > 0.');
 
-    // Set initial state.
+    // Return initial state.
     this.state = {
       table: {
         width: width,
@@ -22,12 +22,12 @@ class RobotSimulator {
   }
 
 
+
   /** Return current state. */
   getCurrentState() {
-    return new Promise((resolve, reject) => {
-      return resolve(this.state);
-    });
+    return (this.state);
   }
+
 
 
   /**
@@ -35,10 +35,13 @@ class RobotSimulator {
    * @param {string} command - The command to parse.
    */
   parseCommand(command) {
-    return new Promise((resolve, reject) => {
 
-      // Use a simple regexp to either return null, or an array of matching segments.
-      var result = /^(PLACE ([0-9]+) ([0-9]+) (NORTH|SOUTH|EAST|WEST)|MOVE|LEFT|RIGHT|REPORT)$/.exec(command);
+    // Use a simple regexp to either return null, or an array of matching segments.
+    var result = /^(PLACE ([0-9]+),([0-9]+),(NORTH|SOUTH|EAST|WEST)|MOVE|LEFT|RIGHT|REPORT)$/.exec(command);
+
+    if (!result) throw new Error('Invalid command syntax');
+    return result;
+
 
       if (result) return resolve(result);
       return reject(new Error('Invalid command syntax'));
