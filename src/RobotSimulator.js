@@ -36,7 +36,10 @@ class RobotSimulator {
    */
   parseCommand(command) {
     return new Promise((resolve, reject) => {
-      var result = /^(PLACE ([0-9]+) ([0-9]+) (NORTH|SOUTH|EAST|WEST)|MOVE ([0-9]+)|LEFT|RIGHT|REPORT)$/.exec(command);
+
+      // Use a simple regexp to either return null, or an array of matching segments.
+      var result = /^(PLACE ([0-9]+) ([0-9]+) (NORTH|SOUTH|EAST|WEST)|MOVE|LEFT|RIGHT|REPORT)$/.exec(command);
+
       if (result) return resolve(result);
       return reject(new Error('Invalid command syntax'));
     });

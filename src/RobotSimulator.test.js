@@ -50,7 +50,7 @@ describe("RobotSimulator", function () {
     });
 
     it("should accept a syntactically correct MOVE command.", function () {
-      return new RobotSimulator(tableWidth, tableHeight).parseCommand('MOVE 1');
+      return new RobotSimulator(tableWidth, tableHeight).parseCommand('MOVE');
     });
 
     it("should accept a syntactically correct RIGHT command.", function () {
