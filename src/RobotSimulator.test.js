@@ -115,6 +115,50 @@ describe("RobotSimulator", function () {
 
   });
 
+  describe("Verify state generation:", function () {
+
+
+
+    it("should correctly reflect state after PLACE command.", function () {
+
+      // Process the command with a new instance of RobotSimulator.
+      const robotSimulator = new RobotSimulator(tableWidth, tableHeight);
+
+      robotSimulator.processCommand('PLACE 0,0,NORTH');
+
+      // Check to see that the state is generated correctly.
+      const state = robotSimulator.getCurrentState();
+      assert.deepEqual(state.robot, {
+        x: 0,
+        y: 0,
+        f: 'NORTH'
+      });
+
+    });
+
+
+
+    it("should correctly reflect state after MOVE command.", function () {
+
+      // Process the command with a new instance of RobotSimulator.
+      const robotSimulator = new RobotSimulator(tableWidth, tableHeight);
+
+      robotSimulator.processCommand('PLACE 0,0,NORTH');
+      robotSimulator.processCommand('MOVE');
+
+      // Check to see that the state is generated correctly.
+      const state = robotSimulator.getCurrentState();
+      assert.deepEqual(state.robot, {
+        x: 0,
+        y: 1,
+        f: 'NORTH'
+      });
+
+    });
+
+
+
+  });
 
   describe("Verify command semantics and logic:", function () {
 
