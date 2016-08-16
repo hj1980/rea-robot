@@ -21,6 +21,14 @@ class RobotSimulator {
 
   }
 
+
+  /** Return current state. */
+  getCurrentState() {
+    return new Promise((resolve, reject) => {
+      resolve(this.state);
+    });
+  }
+
 }
 
 module.exports = RobotSimulator;

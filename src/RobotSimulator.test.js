@@ -23,7 +23,14 @@ describe("RobotSimulator", function () {
   });
 
   it("should contain the correctly sized table surface in it's state.", function () {
-    throw new Error("not implemented yet");
+    return new RobotSimulator(tableWidth, tableHeight).getCurrentState().then((state) => {
+      assert.deepEqual(state, {
+        table: {
+          width: tableWidth,
+          height: tableHeight
+        }
+      });
+    });
   });
 
 
