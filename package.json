@@ -4,7 +4,8 @@
   "description": "REA Toy Robot Simulator",
   "main": "index.js",
   "scripts": {
-    "test": "./node_modules/.bin/mocha src/"
+    "test": "./node_modules/.bin/mocha src/",
+    "jsdoc": "./node_modules/.bin/jsdoc -d ./docs/ src/"
   },
   "author": "Heath Jones <hj1980@gmail.com>",
   "license": "ISC",

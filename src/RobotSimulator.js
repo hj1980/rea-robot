@@ -46,7 +46,7 @@ class RobotSimulator {
 
 
 
-  // Handle PLACE command.
+  /** Handle PLACE command. */
   handlePlaceCommand(parsedCommand) {
 
     // First, get the current state.
@@ -72,7 +72,7 @@ class RobotSimulator {
 
 
 
-  // Handle MOVE command.
+  /** Handle MOVE command. */
   handleMoveCommand() {
 
     // First, get the current state.
@@ -137,7 +137,7 @@ class RobotSimulator {
 
 
 
-  // Handle LEFT command.
+  /** Handle LEFT command. */
   handleLeftCommand() {
 
     // First, get the current state.
@@ -193,7 +193,7 @@ class RobotSimulator {
 
 
 
-  // Handle RIGHT command.
+  /** Handle RIGHT command. */
   handleRightCommand() {
 
     // First, get the current state.
@@ -249,7 +249,7 @@ class RobotSimulator {
 
 
 
-  // Handle REPORT command.
+  /** Handle REPORT command. */
   handleReportCommand() {
 
     // First, get the current state.
