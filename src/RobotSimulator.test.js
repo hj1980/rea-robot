@@ -1,12 +1,25 @@
+const assert = require('assert');
+
 describe("RobotSimulator", function () {
+
+  const RobotSimulator = require('./RobotSimulator');
+  const tableWidth = 5;
+  const tableHeight = 5;
+
 
   // Verify instantiation
   it("should not be able to be instantiated without a valid width and height", function () {
-    throw new Error("not implemented yet");
+    [null, -1, 0].forEach((width) => {
+      [null, -1, 0].forEach((height) => {
+        assert.throws(() => {
+          new RobotSimulator(width, height);
+        });
+      });
+    });
   });
 
   it("should be able to be instantiated with a valid width and height", function () {
-    throw new Error("not implemented yet");
+    new RobotSimulator(tableWidth, tableHeight);
   });
 
   it("should contain the correctly sized table surface in it's state.", function () {
